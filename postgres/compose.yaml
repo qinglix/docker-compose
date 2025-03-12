@@ -1,0 +1,29 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    #container_name: postgres-17
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=1postgres1
+      #- POSTGRES_DB=dbname
+      - TZ=Asia/Shanghai
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - postgres_network
+
+volumes:
+  db_data:
+    driver: local
+
+networks:
+  postgres_network:
+    driver: bridge
